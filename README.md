@@ -1,6 +1,6 @@
 ## ⭐ Food Delivery ⭐
 
-FoodDelivery is a React Web application inspired by the popular food delivery platform, Swiggy.\*\*.
+FoodDelivery is a React Web application inspired by the popular food delivery platform, Swiggy.
 
 <br>
 
