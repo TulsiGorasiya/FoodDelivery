@@ -25,17 +25,19 @@ const Body = () => {
   async function updateState() {
     setIsLoaded(true);
     const restaurantsCards = await getAllRestaurants();
+    console.log(restaurantsCards[0].info, "restaurantsCards");
     setAllRestaurants(restaurantsCards);
     setFilteredRestaurants(restaurantsCards);
     setIsLoaded(false);
   }
 
   const handleSorting = (sortValue) => {
+    console.log(sortValue, "sortValue");
     //1. Sort By Delivery Time
     if (sortValue == "Delivery Time") {
       setFilteredRestaurants((prevItems) => {
         const sortedItems = [...prevItems].sort(
-          (a, b) => a.data.deliveryTime - b.data.deliveryTime
+          (a, b) => a?.info?.sla?.deliveryTime - b?.info?.sla?.deliveryTime
         );
         return sortedItems;
       });
@@ -45,10 +47,10 @@ const Body = () => {
     if (sortValue == "Rating") {
       setFilteredRestaurants((prevItems) => {
         const filterItems = prevItems.filter((item) => {
-          return item.data.avgRating != "--";
+          return item.info.avgRating != "--";
         });
         const sortedItems = [...filterItems].sort(
-          (a, b) => b.data.avgRating - a.data.avgRating
+          (a, b) => b.info.avgRating - a.info.avgRating
         );
         return [...sortedItems];
       });
@@ -59,7 +61,9 @@ const Body = () => {
     if (sortValue == "Cost: Low To High") {
       setFilteredRestaurants((prevItems) => {
         const sortedItems = [...prevItems].sort(
-          (a, b) => a.data.costForTwo - b.data.costForTwo
+          (a, b) =>
+            parseInt(a.info.costForTwo.replace(/[^\d]/g, ""), 10) -
+            parseInt(b.info.costForTwo.replace(/[^\d]/g, ""), 10)
         );
         return sortedItems;
       });
@@ -69,7 +73,9 @@ const Body = () => {
     if (sortValue == "Cost: High To Low") {
       setFilteredRestaurants((prevItems) => {
         const sortedItems = [...prevItems].sort(
-          (a, b) => b.data.costForTwo - a.data.costForTwo
+          (a, b) =>
+            parseInt(b.info.costForTwo.replace(/[^\d]/g, ""), 10) -
+            parseInt(a.info.costForTwo.replace(/[^\d]/g, ""), 10)
         );
         return sortedItems;
       });
@@ -172,10 +178,10 @@ const Body = () => {
             return (
               // passing unique key to every component for fast Reconciliation
               <Link
-                to={"/restaurant/" + restaurant?.data?.id}
-                key={restaurant?.data?.id}
+                to={"/restaurant/" + restaurant?.info?.id}
+                key={restaurant?.info?.id}
               >
-                <RestaurantCard {...restaurant?.data} />
+                <RestaurantCard {...restaurant?.info} />
               </Link>
             );
           })}
